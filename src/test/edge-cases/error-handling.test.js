@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mountComponent, waitForAsyncUpdate } from '../utils/test-utils.js'
 import { createRouter, createWebHistory } from 'vue-router'
-import { mockErrorScenarios } from '../fixtures/index.js'
 import HeaderNav from '@/components/layout/HeaderNav.vue'
 import router from '@/router/index.js'
 
@@ -17,7 +16,7 @@ describe('Error Handling and Edge Cases', () => {
     console.warn = vi.fn()
     
     // Mock fetch for API error testing
-    global.fetch = vi.fn()
+    globalThis.fetch = vi.fn()
   })
 
   afterEach(() => {
@@ -232,7 +231,7 @@ describe('Error Handling and Edge Cases', () => {
 
   describe('Network and API Error Handling', () => {
     it('handles fetch failures gracefully', async () => {
-      global.fetch.mockRejectedValue(new Error('Network error'))
+      globalThis.fetch.mockRejectedValue(new Error('Network error'))
       
       // Test component that makes API calls
       const APIComponent = {
@@ -256,7 +255,7 @@ describe('Error Handling and Edge Cases', () => {
     })
 
     it('handles timeout scenarios', async () => {
-      global.fetch.mockImplementation(() => 
+      globalThis.fetch.mockImplementation(() => 
         new Promise(resolve => setTimeout(resolve, 5000))
       )
       
@@ -290,25 +289,25 @@ describe('Error Handling and Edge Cases', () => {
   describe('Browser Compatibility Edge Cases', () => {
     it('handles missing modern browser APIs', () => {
       // Mock missing ResizeObserver
-      const originalResizeObserver = global.ResizeObserver
-      delete global.ResizeObserver
+      const originalResizeObserver = globalThis.ResizeObserver
+      delete globalThis.ResizeObserver
       
       const wrapper = mountComponent(HeaderNav)
       expect(wrapper.exists()).toBe(true)
       
       // Restore
-      global.ResizeObserver = originalResizeObserver
+      globalThis.ResizeObserver = originalResizeObserver
     })
 
     it('handles missing IntersectionObserver', () => {
-      const originalIntersectionObserver = global.IntersectionObserver
-      delete global.IntersectionObserver
+      const originalIntersectionObserver = globalThis.IntersectionObserver
+      delete globalThis.IntersectionObserver
       
       const wrapper = mountComponent(HeaderNav)
       expect(wrapper.exists()).toBe(true)
       
       // Restore
-      global.IntersectionObserver = originalIntersectionObserver
+      globalThis.IntersectionObserver = originalIntersectionObserver
     })
 
     it('handles missing matchMedia', () => {

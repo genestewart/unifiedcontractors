@@ -113,13 +113,13 @@ export const createTestEnvironment = (options = {}) => {
   const pinia = options.pinia || createTestPinia()
   
   // Mock global objects consistently
-  global.ResizeObserver = vi.fn(() => ({
+  globalThis.ResizeObserver = vi.fn(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn()
   }))
   
-  global.IntersectionObserver = vi.fn(() => ({
+  globalThis.IntersectionObserver = vi.fn(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn()

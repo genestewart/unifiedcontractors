@@ -1,5 +1,5 @@
 // Global test setup for enhanced CI reliability
-import { vi } from 'vitest'
+import { vi, afterEach } from 'vitest'
 
 // Set up global test environment
 globalThis.process = globalThis.process || { env: {} }

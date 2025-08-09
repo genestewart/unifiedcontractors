@@ -7,8 +7,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import router from '@/router/index.js'
 
 // Mock performance API if not available
-if (!global.performance) {
-  global.performance = {
+if (!globalThis.performance) {
+  globalThis.performance = {
     now: () => Date.now(),
     mark: vi.fn(),
     measure: vi.fn(),
@@ -134,8 +134,8 @@ describe('Performance Tests', () => {
       }
       
       // Force garbage collection if available
-      if (global.gc) {
-        global.gc()
+      if (globalThis.gc) {
+        globalThis.gc()
       }
       
       const finalMemory = process.memoryUsage?.()?.heapUsed || 0
