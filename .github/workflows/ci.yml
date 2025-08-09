@@ -1,0 +1,218 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+    types: [ opened, synchronize, reopened ]
+
+# Cancel any in-progress runs for the same branch/PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for better analysis
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+            ${{ runner.os }}-node-
+            
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci --prefer-offline --no-audit
+        
+      - name: Run ESLint
+        run: npm run lint
+        
+      - name: Run unit tests
+        run: npm run test:run
+        
+      - name: Generate test coverage
+        run: npm run test:coverage
+        
+      - name: Upload coverage reports
+        if: matrix.node-version == '20.x'  # Only upload once
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+          
+      - name: Upload coverage to Codecov
+        if: matrix.node-version == '20.x'  # Only upload once
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false  # Don't fail CI if upload fails
+          verbose: true
+
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    
+    strategy:
+      matrix:
+        node-version: [20.x]  # Use stable LTS for production build
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+            ${{ runner.os }}-node-
+            
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci --prefer-offline --no-audit
+        
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+          
+      - name: Check build output
+        run: |
+          echo "Build directory contents:"
+          ls -la dist/
+          echo "Build size:"
+          du -sh dist/
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          retention-days: 30
+          if-no-files-found: error
+          
+      - name: Upload build for deployment
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: dist/
+          retention-days: 90
+
+  lighthouse:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          staticDistDir: ./dist
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true  # Don't fail CI, but report issues
+        
+      - name: Run dependency check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'unified-contractors'
+          path: '.'
+          format: 'HTML'
+          args: >
+            --enableRetired
+            --enableExperimental
+        continue-on-error: true
+        
+      - name: Upload dependency check results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-check-report
+          path: reports/
+          retention-days: 7
+
+  # Job to check if all required checks passed
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    needs: [lint-and-test, build]
+    if: success()
+    
+    steps:
+      - name: CI Pipeline Successful
+        run: |
+          echo "All CI checks passed successfully!"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref }}"
+          echo "Run ID: ${{ github.run_id }}"

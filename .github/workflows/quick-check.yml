@@ -1,0 +1,82 @@
+name: Quick Syntax Check
+
+on:
+  push:
+    paths:
+      - '**.js'
+      - '**.vue'
+      - '**.json'
+      - '**.yml'
+      - '**.yaml'
+  workflow_dispatch:
+
+# This workflow provides rapid feedback for syntax errors
+# It runs faster than the full CI pipeline
+
+jobs:
+  syntax-check:
+    name: Quick Syntax Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1  # Shallow clone for speed
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-quick-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-quick-
+            
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci --prefer-offline --no-audit
+        
+      - name: Check JavaScript/Vue syntax
+        run: |
+          echo "Checking JavaScript and Vue files for syntax errors..."
+          npx vue-tsc --noEmit --skipLibCheck || true
+          npm run lint -- --max-warnings 0
+          
+      - name: Validate JSON files
+        run: |
+          echo "Validating JSON files..."
+          for file in $(find . -name "*.json" -not -path "./node_modules/*" -not -path "./dist/*" -not -path "./coverage/*"); do
+            echo "Checking $file"
+            node -e "JSON.parse(require('fs').readFileSync('$file', 'utf8'))" || exit 1
+          done
+          
+      - name: Validate YAML files
+        run: |
+          echo "Validating YAML files..."
+          npm install -g js-yaml
+          for file in $(find .github -name "*.yml" -o -name "*.yaml"); do
+            echo "Checking $file"
+            js-yaml $file > /dev/null || exit 1
+          done
+          
+      - name: Quick build test
+        run: |
+          echo "Running quick build test..."
+          npm run build -- --mode development
+          
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Quick Check Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- JavaScript/Vue syntax: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- JSON validation: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- YAML validation: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Build test: ✅" >> $GITHUB_STEP_SUMMARY

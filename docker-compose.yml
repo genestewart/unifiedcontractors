@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Development environment
+  dev:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    ports:
+      - "5173:5173"  # Vite default port
+    environment:
+      - NODE_ENV=development
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    networks:
+      - unified-network
+
+  # Production preview
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - unified-network
+    restart: unless-stopped
+
+  # Test runner
+  test:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=test
+    command: sh -c "npm install && npm run test:watch"
+    networks:
+      - unified-network
+
+  # Nginx reverse proxy (optional, for production-like setup)
+  nginx-proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./dist:/usr/share/nginx/html:ro
+    depends_on:
+      - prod
+    networks:
+      - unified-network
+    restart: unless-stopped
+
+volumes:
+  node_modules:
+
+networks:
+  unified-network:
+    driver: bridge
