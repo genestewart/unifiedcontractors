@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { nextTick } from 'vue'
+// nextTick is auto-imported globally
 import HeaderNav from '@/components/layout/HeaderNav.vue'
 import { renderWithProviders } from '../utils/test-utils.js'
 

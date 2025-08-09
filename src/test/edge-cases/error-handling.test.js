@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { nextTick } from 'vue'
+// nextTick is auto-imported globally
 import { mountComponent, waitForAsyncUpdate } from '../utils/test-utils.js'
 import { createRouter, createWebHistory } from 'vue-router'
 import HeaderNav from '@/components/layout/HeaderNav.vue'

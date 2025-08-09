@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue' // nextTick is auto-imported globally
 import { renderWithProviders } from '../utils/test-utils.js'
 
 // Example component for testing various mounting scenarios

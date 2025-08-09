@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createRouter, createWebHistory } from 'vue-router'
 import { mount } from '@vue/test-utils'
-import { nextTick } from 'vue'
+// nextTick is auto-imported globally
 import router from '@/router/index.js'
 
 // Mock the view components since we're testing routing logic

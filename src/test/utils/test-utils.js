@@ -1,5 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils'
-import { nextTick } from 'vue'
+// nextTick is auto-imported globally
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import { vi } from 'vitest'

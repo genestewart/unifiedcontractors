@@ -279,7 +279,7 @@ describe('Performance Tests', () => {
       
       // Change unchangedValue (should not trigger re-render if optimized)
       wrapper.vm.unchangedValue = 'static' // Same value
-      await wrapper.vm.$nextTick()
+      await nextTick()
       
       expect(renderCount).toBe(initialRenderCount)
     })

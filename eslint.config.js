@@ -1,5 +1,7 @@
 import js from '@eslint/js'
 import pluginVue from 'eslint-plugin-vue'
+import { readFileSync } from 'fs'
+const autoImportGlobals = JSON.parse(readFileSync('./.eslintrc-auto-import.json', 'utf-8'))
 
 export default [
   js.configs.recommended,
@@ -9,6 +11,8 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
+        // Auto-imported Vue/Pinia/Router globals from unplugin-auto-import
+        ...autoImportGlobals.globals,
         // Node.js globals
         process: 'readonly',
         Buffer: 'readonly',

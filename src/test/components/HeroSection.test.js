@@ -339,7 +339,8 @@ describe('HeroSection', () => {
     it('maintains consistent branding', () => {
       const heroContent = wrapper.text()
       
-      expect(heroContent).toContain('Unified Contractors') // Implicit in context
+      expect(heroContent).toContain('Building Dreams') // Main headline
+      expect(heroContent).toContain('Protecting Homes') // Subtitle of headline
       expect(heroContent).toContain('Park City')
       expect(heroContent).toContain('Licensed & Insured')
       expect(heroContent).toContain('Family-Owned')
