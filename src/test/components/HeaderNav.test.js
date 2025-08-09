@@ -28,7 +28,7 @@ describe('HeaderNav', () => {
 
       expect(brandLink.exists()).toBe(true)
       expect(logo.exists()).toBe(true)
-      expect(logo.attributes('alt')).toBe('Unified Contractors')
+      expect(logo.attributes('alt')).toBe('Unified Contractors logo')
       expect(brandText.text()).toBe('Unified Contractors')
     })
 
@@ -38,8 +38,8 @@ describe('HeaderNav', () => {
       // Should have 5 total nav links (including Services which is a regular anchor)
       expect(navLinks.length).toBe(5)
       
-      // Check if Services link exists by finding the one with href="#"
-      const servicesLink = wrapper.find('a.nav-link[href="#"]')
+      // Check if Services dropdown button exists
+      const servicesLink = wrapper.find('button.nav-link.dropdown-toggle')
       expect(servicesLink.exists()).toBe(true)
       expect(servicesLink.text()).toContain('Services')
       
@@ -117,8 +117,8 @@ describe('HeaderNav', () => {
 
   describe('Dropdown Menu Functionality', () => {
     it('toggles services dropdown when services link is clicked', async () => {
-      // Find the services link by looking for the one with dropdown chevron
-      const servicesLink = wrapper.find('a.nav-link[href="#"]')
+      // Find the services dropdown button
+      const servicesLink = wrapper.find('button.nav-link.dropdown-toggle')
       const dropdownMenu = wrapper.find('.dropdown-menu')
 
       // Initially hidden (using v-show, so it exists but not visible)
@@ -159,7 +159,7 @@ describe('HeaderNav', () => {
 
     it('closes dropdown and mobile menu when dropdown item is clicked', async () => {
       const toggleButton = wrapper.find('.nav-toggle')
-      const servicesLink = wrapper.find('a.nav-link[href="#"]')
+      const servicesLink = wrapper.find('button.nav-link.dropdown-toggle')
       const navMenu = wrapper.find('.nav-menu')
       const dropdownItem = wrapper.find('.dropdown-menu a')
 
@@ -202,7 +202,7 @@ describe('HeaderNav', () => {
       expect(toggleButton.attributes('aria-expanded')).toBeDefined()
       
       const logo = wrapper.find('.logo')
-      expect(logo.attributes('alt')).toBe('Unified Contractors')
+      expect(logo.attributes('alt')).toBe('Unified Contractors logo')
     })
   })
 
@@ -217,7 +217,7 @@ describe('HeaderNav', () => {
   describe('Component State Management', () => {
     it('maintains independent state for mobile menu and dropdown', async () => {
       const toggleButton = wrapper.find('.nav-toggle')
-      const servicesLink = wrapper.find('a.nav-link[href="#"]')
+      const servicesLink = wrapper.find('button.nav-link.dropdown-toggle')
       const navMenu = wrapper.find('.nav-menu')
 
       // Open mobile menu

@@ -57,7 +57,7 @@ describe('Vue Router Configuration', () => {
     it('creates router instance correctly', () => {
       expect(router).toBeDefined()
       expect(router.getRoutes()).toBeDefined()
-      expect(router.getRoutes().length).toBe(5)
+      expect(router.getRoutes().length).toBe(6) // 5 main routes + 1 not-found route
     })
 
     it('uses correct history mode', () => {
@@ -68,7 +68,8 @@ describe('Vue Router Configuration', () => {
     it('has scroll behavior configured', () => {
       expect(router.options.scrollBehavior).toBeDefined()
       
-      const scrollResult = router.options.scrollBehavior()
+      // Test scroll behavior with proper parameters
+      const scrollResult = router.options.scrollBehavior({}, {}, null)
       expect(scrollResult).toEqual({ top: 0 })
     })
   })
@@ -219,12 +220,12 @@ describe('Vue Router Configuration', () => {
       await testRouter.push('/')
       expect(testRouter.currentRoute.value.name).toBe('home')
 
-      // Try to navigate to invalid route - in Vue Router 4, this doesn't fail
-      // but creates a route with matched: []
+      // Try to navigate to invalid route - Vue Router 4 will match the catch-all route
       await testRouter.push('/invalid')
 
-      // Check that we're now on an invalid route (no matched routes)
-      expect(testRouter.currentRoute.value.matched.length).toBe(0)
+      // Check that we're now on the not-found route (catch-all route matches)
+      expect(testRouter.currentRoute.value.matched.length).toBe(1)
+      expect(testRouter.currentRoute.value.name).toBe('not-found')
       expect(testRouter.currentRoute.value.path).toBe('/invalid')
     })
   })

@@ -5,7 +5,6 @@ import vue from '@vitejs/plugin-vue'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { VitePWA } from 'vite-plugin-pwa'
 import { webfontDownload } from 'vite-plugin-webfont-dl'
-// import { ViteCompress } from 'vite-plugin-compress' // Temporarily disabled
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
@@ -65,11 +64,6 @@ export default defineConfig(({ mode }) => ({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg}']
       }
     }),
-    
-    // Compression for static assets (handled by server/CDN)
-    // mode === 'production' && ViteCompress({
-    //   algorithm: 'gzip'
-    // }),
     
     // Bundle analyzer (only in analyze mode)
     mode === 'analyze' && visualizer({
