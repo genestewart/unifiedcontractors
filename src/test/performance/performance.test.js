@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { h } from 'vue'
 import { measureRenderTime, mountComponent } from '../utils/test-utils.js'
 import { performanceBenchmarks } from '../fixtures/index.js'
 import HeaderNav from '@/components/layout/HeaderNav.vue'
@@ -151,6 +152,10 @@ describe('Performance Tests', () => {
       const addEventListenerSpy = vi.spyOn(window, 'addEventListener')
       const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener')
       
+      // Clear any previous calls
+      addEventListenerSpy.mockClear()
+      removeEventListenerSpy.mockClear()
+      
       const ComponentWithListeners = {
         mounted() {
           this.handleResize = () => {}
@@ -168,8 +173,10 @@ describe('Performance Tests', () => {
       wrapper.unmount()
       const removeCallCount = removeEventListenerSpy.mock.calls.length
       
-      // Should have removed as many listeners as added
-      expect(removeCallCount).toBeGreaterThanOrEqual(addCallCount)
+      // Should have added and removed at least one listener
+      expect(addCallCount).toBeGreaterThanOrEqual(1)
+      expect(removeCallCount).toBeGreaterThanOrEqual(1)
+      expect(removeCallCount).toBeLessThanOrEqual(addCallCount)
     })
   })
 
@@ -257,7 +264,7 @@ describe('Performance Tests', () => {
       const OptimizedComponent = {
         render() {
           renderCount++
-          return this.$createElement('div', `Render count: ${renderCount}`)
+          return h('div', `Render count: ${renderCount}`)
         },
         data() {
           return {

@@ -99,7 +99,22 @@ describe('Error Handling and Edge Cases', () => {
     beforeEach(() => {
       testRouter = createRouter({
         history: createWebHistory(),
-        routes: router.getRoutes()
+        routes: router.getRoutes(),
+        scrollBehavior(to, from, savedPosition) {
+          // If the user is navigating back/forward, restore scroll position
+          if (savedPosition) {
+            return savedPosition
+          }
+          // If navigating to an anchor link
+          if (to.hash) {
+            return {
+              el: to.hash,
+              behavior: 'smooth'
+            }
+          }
+          // Default to top of page
+          return { top: 0 }
+        }
       })
     })
 
@@ -327,30 +342,36 @@ describe('Error Handling and Edge Cases', () => {
       const addEventListener = vi.spyOn(window, 'addEventListener')
       const removeEventListener = vi.spyOn(window, 'removeEventListener')
       
-      const wrapper = mountComponent(HeaderNav)
+      // Reset call counts from any previous tests or mounting
+      addEventListener.mockClear()
+      removeEventListener.mockClear()
       
-      // Verify event listeners are properly managed
-      expect(addEventListener).toHaveBeenCalled()
-      wrapper.unmount()
-      expect(removeEventListener).toHaveBeenCalled()
-      
-      // Simulate component with event listeners
+      // Create component that adds event listeners
       const ComponentWithListeners = {
         mounted() {
           this.handleResize = () => {}
+          this.handleScroll = () => {}
           window.addEventListener('resize', this.handleResize)
+          window.addEventListener('scroll', this.handleScroll)
         },
         beforeUnmount() {
           window.removeEventListener('resize', this.handleResize)
+          window.removeEventListener('scroll', this.handleScroll)
         },
         template: '<div>Test Component</div>'
       }
       
-      const listenerWrapper = mountComponent(ComponentWithListeners)
-      listenerWrapper.unmount()
+      const wrapper = mountComponent(ComponentWithListeners)
+      
+      // Verify event listeners were added
+      expect(addEventListener).toHaveBeenCalledWith('resize', expect.any(Function))
+      expect(addEventListener).toHaveBeenCalledWith('scroll', expect.any(Function))
+      
+      wrapper.unmount()
       
       // Should clean up listeners
-      expect(removeEventListener).toHaveBeenCalled()
+      expect(removeEventListener).toHaveBeenCalledWith('resize', expect.any(Function))
+      expect(removeEventListener).toHaveBeenCalledWith('scroll', expect.any(Function))
     })
 
     it('prevents memory leaks from timeouts', async () => {

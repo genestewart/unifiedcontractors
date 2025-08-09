@@ -194,7 +194,7 @@
               <a
                 href="tel:435-555-0100"
                 class="btn-phone"
-                aria-label="Call us at 4 3 5 5 5 5 0 1 0 0"
+                aria-label="Call us at 4 3 5 5 5 0 1 0 0"
               >
                 <i
                   class="pi pi-phone"

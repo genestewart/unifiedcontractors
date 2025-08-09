@@ -1,4 +1,5 @@
-import { mount, nextTick, flushPromises } from '@vue/test-utils'
+import { mount, flushPromises } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import { vi } from 'vitest'
