@@ -2,8 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mountComponent, getAccessibilityViolations } from '../utils/test-utils.js'
 import HeaderNav from '@/components/layout/HeaderNav.vue'
-import FooterSection from '@/components/layout/FooterSection.vue'
-import { mockUserScenarios } from '../fixtures/index.js'
 
 // Mock assets
 vi.mock('@/assets/logo.svg', () => ({

@@ -313,6 +313,9 @@ describe('FooterSection', () => {
     it('includes all necessary icons', () => {
       const icons = wrapper.findAll('[class*="pi-"]')
       
+      // Should have at least some icons present
+      expect(icons.length).toBeGreaterThan(0)
+      
       // Social media icons
       expect(wrapper.find('.pi-facebook').exists()).toBe(true)
       expect(wrapper.find('.pi-instagram').exists()).toBe(true)

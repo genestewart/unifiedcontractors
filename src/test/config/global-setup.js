@@ -72,7 +72,7 @@ if (!globalThis.requestIdleCallback) {
 
 // Mock URL constructor for older environments
 if (!globalThis.URL) {
-  globalThis.URL = vi.fn().mockImplementation((url, base) => {
+  globalThis.URL = vi.fn().mockImplementation((url) => {
     const mockUrl = {
       href: url,
       origin: 'http://localhost:3000',
