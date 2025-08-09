@@ -329,6 +329,11 @@ describe('Error Handling and Edge Cases', () => {
       
       const wrapper = mountComponent(HeaderNav)
       
+      // Verify event listeners are properly managed
+      expect(addEventListener).toHaveBeenCalled()
+      wrapper.unmount()
+      expect(removeEventListener).toHaveBeenCalled()
+      
       // Simulate component with event listeners
       const ComponentWithListeners = {
         mounted() {

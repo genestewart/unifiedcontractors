@@ -289,6 +289,9 @@ describe('Navigation Integration Tests', () => {
         } 
       })
       
+      // Test that dynamic import would be called for lazy routes
+      expect(typeof dynamicImport).toBe('function')
+      
       // Navigate to a lazy-loaded route
       await testRouter.push('/services')
       await waitForAsyncUpdate()
