@@ -14,7 +14,9 @@
         <div class="row g-5">
           <div class="col-lg-8">
             <div class="contact-form-wrapper">
-              <h2 id="contact-form-heading">Request Your Free Estimate</h2>
+              <h2 id="contact-form-heading">
+                Request Your Free Estimate
+              </h2>
               <form
                 class="contact-form"
                 role="form"
@@ -24,13 +26,18 @@
               >
                 <!-- Personal Information Fieldset -->
                 <fieldset class="form-fieldset">
-                  <legend class="form-legend">Personal Information</legend>
+                  <legend class="form-legend">
+                    Personal Information
+                  </legend>
                   <div class="row g-3">
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="firstName">
                           First Name 
-                          <span class="required-indicator" aria-label="required">*</span>
+                          <span
+                            class="required-indicator"
+                            aria-label="required"
+                          >*</span>
                         </label>
                         <input
                           id="firstName"
@@ -56,7 +63,10 @@
                       <div class="form-group">
                         <label for="lastName">
                           Last Name 
-                          <span class="required-indicator" aria-label="required">*</span>
+                          <span
+                            class="required-indicator"
+                            aria-label="required"
+                          >*</span>
                         </label>
                         <input
                           id="lastName"
@@ -83,13 +93,18 @@
 
                 <!-- Contact Information Fieldset -->
                 <fieldset class="form-fieldset">
-                  <legend class="form-legend">Contact Information</legend>
+                  <legend class="form-legend">
+                    Contact Information
+                  </legend>
                   <div class="row g-3">
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="email">
                           Email Address 
-                          <span class="required-indicator" aria-label="required">*</span>
+                          <span
+                            class="required-indicator"
+                            aria-label="required"
+                          >*</span>
                         </label>
                         <input
                           id="email"
@@ -122,7 +137,10 @@
                       <div class="form-group">
                         <label for="phone">
                           Phone Number 
-                          <span class="required-indicator" aria-label="required">*</span>
+                          <span
+                            class="required-indicator"
+                            aria-label="required"
+                          >*</span>
                         </label>
                         <input
                           id="phone"
@@ -157,11 +175,16 @@
 
                 <!-- Project Information Fieldset -->
                 <fieldset class="form-fieldset">
-                  <legend class="form-legend">Project Information</legend>
+                  <legend class="form-legend">
+                    Project Information
+                  </legend>
                   <div class="form-group">
                     <label for="service">
                       Service Needed 
-                      <span class="required-indicator" aria-label="required">*</span>
+                      <span
+                        class="required-indicator"
+                        aria-label="required"
+                      >*</span>
                     </label>
                     <select
                       id="service"
@@ -207,7 +230,10 @@
                   <div class="form-group">
                     <label for="message">
                       Project Details 
-                      <span class="required-indicator" aria-label="required">*</span>
+                      <span
+                        class="required-indicator"
+                        aria-label="required"
+                      >*</span>
                     </label>
                     <textarea
                       id="message"
@@ -281,7 +307,12 @@
                 >
                   <h3>Please correct the following errors:</h3>
                   <ul>
-                    <li v-for="error in Object.values(formErrors)" :key="error">{{ error }}</li>
+                    <li
+                      v-for="error in Object.values(formErrors)"
+                      :key="error"
+                    >
+                      {{ error }}
+                    </li>
                   </ul>
                 </div>
 
@@ -419,7 +450,7 @@ const validateField = (fieldName, value) => {
     case 'phone':
       if (!value.trim()) {
         errors.phone = 'Phone number is required'
-      } else if (!/^[\d\s\-\(\)]+$/.test(value) || value.replace(/\D/g, '').length < 10) {
+      } else if (!/^[\d\s\-()]+$/.test(value) || value.replace(/\D/g, '').length < 10) {
         errors.phone = 'Please enter a valid 10-digit phone number'
       }
       break
@@ -509,6 +540,7 @@ const handleSubmit = async () => {
     }, 100)
     
   } catch (error) {
+    console.error('Form submission error:', error)
     submitError.value = true
     formErrors.value = { general: 'There was an error submitting your form. Please try again.' }
   } finally {

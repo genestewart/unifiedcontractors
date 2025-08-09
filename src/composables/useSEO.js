@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onUnmounted } from 'vue'
 
 /**
  * SEO composable for managing meta tags, Open Graph data, and structured data

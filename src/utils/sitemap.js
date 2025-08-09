@@ -183,7 +183,6 @@ export function buildCompleteSitemap(config = {}) {
   const {
     baseUrl = 'https://unifiedcontractors.com',
     routes = [],
-    additionalUrls = [],
     excludePaths = []
   } = config
 

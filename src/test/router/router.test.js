@@ -42,7 +42,6 @@ vi.mock('@/views/PortfolioView.vue', () => ({
 
 describe('Vue Router Configuration', () => {
   let testRouter
-  let wrapper
 
   beforeEach(() => {
     // Create a fresh router instance for each test
@@ -51,16 +50,7 @@ describe('Vue Router Configuration', () => {
       routes: router.getRoutes()
     })
 
-    // Create a simple app component with RouterView
-    const App = {
-      template: '<router-view />'
-    }
-
-    wrapper = mount(App, {
-      global: {
-        plugins: [testRouter]
-      }
-    })
+    // Router setup completed - tests will use testRouter directly
   })
 
   describe('Router Instance', () => {

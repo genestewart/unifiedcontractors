@@ -1,6 +1,13 @@
 <template>
-  <header class="header-nav" role="banner">
-    <nav class="navbar" role="navigation" aria-label="Main navigation">
+  <header
+    class="header-nav"
+    role="banner"
+  >
+    <nav
+      class="navbar"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div class="container">
         <div class="nav-wrapper">
           <RouterLink
@@ -37,8 +44,14 @@
             :class="{ active: mobileMenuOpen }"
             :aria-hidden="(!mobileMenuOpen).toString()"
           >
-            <ul class="nav-list" role="menubar">
-              <li class="nav-item" role="none">
+            <ul
+              class="nav-list"
+              role="menubar"
+            >
+              <li
+                class="nav-item"
+                role="none"
+              >
                 <RouterLink
                   to="/"
                   class="nav-link"
@@ -49,7 +62,10 @@
                   Home
                 </RouterLink>
               </li>
-              <li class="nav-item dropdown" role="none">
+              <li
+                class="nav-item dropdown"
+                role="none"
+              >
                 <button
                   type="button"
                   class="nav-link dropdown-toggle"
@@ -62,11 +78,14 @@
                   @keydown.escape="closeDropdown"
                   @keydown.arrow-down.prevent="focusFirstDropdownItem"
                 >
-                  Services <i class="pi pi-chevron-down" aria-hidden="true" />
+                  Services <i
+                    class="pi pi-chevron-down"
+                    aria-hidden="true"
+                  />
                 </button>
                 <ul
-                  id="services-dropdown"
                   v-show="dropdownOpen"
+                  id="services-dropdown"
                   class="dropdown-menu"
                   role="menu"
                   :aria-hidden="(!dropdownOpen).toString()"
@@ -77,7 +96,9 @@
                       role="menuitem"
                       @click="closeMobileMenu"
                       @keydown.escape="closeDropdown"
-                    >Custom Homes</RouterLink>
+                    >
+                      Custom Homes
+                    </RouterLink>
                   </li>
                   <li role="none">
                     <RouterLink
@@ -85,7 +106,9 @@
                       role="menuitem"
                       @click="closeMobileMenu"
                       @keydown.escape="closeDropdown"
-                    >Design Services</RouterLink>
+                    >
+                      Design Services
+                    </RouterLink>
                   </li>
                   <li role="none">
                     <RouterLink
@@ -93,7 +116,9 @@
                       role="menuitem"
                       @click="closeMobileMenu"
                       @keydown.escape="closeDropdown"
-                    >Remodeling</RouterLink>
+                    >
+                      Remodeling
+                    </RouterLink>
                   </li>
                   <li role="none">
                     <RouterLink
@@ -101,7 +126,9 @@
                       role="menuitem"
                       @click="closeMobileMenu"
                       @keydown.escape="closeDropdown"
-                    >Water Mitigation</RouterLink>
+                    >
+                      Water Mitigation
+                    </RouterLink>
                   </li>
                   <li role="none">
                     <RouterLink
@@ -109,11 +136,16 @@
                       role="menuitem"
                       @click="closeMobileMenu"
                       @keydown.escape="closeDropdown"
-                    >Sump Pump Systems</RouterLink>
+                    >
+                      Sump Pump Systems
+                    </RouterLink>
                   </li>
                 </ul>
               </li>
-              <li class="nav-item" role="none">
+              <li
+                class="nav-item"
+                role="none"
+              >
                 <RouterLink
                   to="/about"
                   class="nav-link"
@@ -124,7 +156,10 @@
                   About
                 </RouterLink>
               </li>
-              <li class="nav-item" role="none">
+              <li
+                class="nav-item"
+                role="none"
+              >
                 <RouterLink
                   to="/portfolio"
                   class="nav-link"
@@ -135,7 +170,10 @@
                   Portfolio
                 </RouterLink>
               </li>
-              <li class="nav-item" role="none">
+              <li
+                class="nav-item"
+                role="none"
+              >
                 <RouterLink
                   to="/contact"
                   class="nav-link"
@@ -148,13 +186,20 @@
               </li>
             </ul>
 
-            <div class="nav-cta" role="group" aria-label="Contact actions">
+            <div
+              class="nav-cta"
+              role="group"
+              aria-label="Contact actions"
+            >
               <a
                 href="tel:435-555-0100"
                 class="btn-phone"
                 aria-label="Call us at 4 3 5 5 5 5 0 1 0 0"
               >
-                <i class="pi pi-phone" aria-hidden="true" /> (435) 555-0100
+                <i
+                  class="pi pi-phone"
+                  aria-hidden="true"
+                /> (435) 555-0100
               </a>
               <RouterLink
                 to="/contact"

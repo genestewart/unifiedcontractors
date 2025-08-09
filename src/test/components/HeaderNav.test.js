@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import HeaderNav from '@/components/layout/HeaderNav.vue'
 import { renderWithProviders } from '../utils/test-utils.js'

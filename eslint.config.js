@@ -14,6 +14,9 @@ export default [
         Buffer: 'readonly',
         __dirname: 'readonly',
         __filename: 'readonly',
+        module: 'readonly',
+        exports: 'readonly',
+        require: 'readonly',
         // Browser globals
         window: 'readonly',
         document: 'readonly',

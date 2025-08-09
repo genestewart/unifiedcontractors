@@ -1,7 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
-import { createPinia } from 'pinia'
 import { nextTick, ref } from 'vue'
 import { renderWithProviders } from '../utils/test-utils.js'
 
@@ -241,7 +240,7 @@ describe('Component Mounting Examples', () => {
         ]
       })
 
-      const wrapper = mount(RouterComponent, {
+      const routerWrapper = mount(RouterComponent, {
         global: {
           plugins: [testRouter],
           stubs: {
@@ -258,6 +257,7 @@ describe('Component Mounting Examples', () => {
       await nextTick()
 
       expect(testRouter.currentRoute.value.name).toBe('about')
+      expect(routerWrapper.exists()).toBe(true)
     })
   })
 

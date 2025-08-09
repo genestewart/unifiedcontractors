@@ -163,7 +163,7 @@ class PerformanceTest {
       stats.cssSize = Math.round(stats.cssSize / 1024)
       
     } catch (error) {
-      logWarning('Could not analyze bundle size in detail')
+      logWarning(`Could not analyze bundle size in detail: ${error.message}`)
       stats.totalSize = 'Unknown'
       stats.gzippedSize = 'Unknown'
     }
@@ -176,6 +176,7 @@ class PerformanceTest {
       const { stdout } = await execAsync(`stat -c%s "${filePath}"`)
       return { size: parseInt(stdout.trim()) }
     } catch (error) {
+      logWarning(`Could not get file size: ${error.message}`)
       return { size: 0 }
     }
   }
@@ -235,7 +236,7 @@ class PerformanceTest {
       if (pwaMatch) results.pwa = pwaMatch[1]
       
     } catch (error) {
-      logWarning('Could not parse Lighthouse results')
+      logWarning(`Could not parse Lighthouse results: ${error.message}`)
     }
     
     return results

@@ -2,7 +2,9 @@
   <main class="not-found-page">
     <div class="container">
       <div class="not-found-content">
-        <div class="error-code">404</div>
+        <div class="error-code">
+          404
+        </div>
         <h1>Page Not Found</h1>
         <p class="lead">
           Sorry, the page you are looking for could not be found.

@@ -1,12 +1,11 @@
-import { ref, onMounted, onUnmounted } from 'vue'
-
 /**
  * Accessibility composable for focus management and screen reader utilities
  * Provides utilities for better keyboard navigation and assistive technology support
  */
 export function useAccessibility() {
-  const focusableElements = ref([])
-  const currentFocusIndex = ref(0)
+  // Reserved for future focus management features
+  // const focusableElements = ref([])
+  // const currentFocusIndex = ref(0)
 
   // CSS selector for focusable elements
   const focusableSelector = [

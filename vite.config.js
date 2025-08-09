@@ -9,7 +9,7 @@ import { webfontDownload } from 'vite-plugin-webfont-dl'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
-export default defineConfig(({ command, mode }) => ({
+export default defineConfig(({ mode }) => ({
   plugins: [
     vue(),
     

@@ -11,7 +11,7 @@ vi.mock('*.jpg', () => '/mock-image.jpg')
 vi.mock('*.jpeg', () => '/mock-image.jpeg')
 
 // Global test configuration
-global.ResizeObserver = vi.fn(() => ({
+globalThis.ResizeObserver = vi.fn(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
@@ -33,7 +33,7 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 // Mock IntersectionObserver
-global.IntersectionObserver = vi.fn(() => ({
+globalThis.IntersectionObserver = vi.fn(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
